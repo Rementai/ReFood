@@ -1,0 +1,20 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  height: 100%;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Umożliwia kontenerowi zajmowanie pełnej wysokości okna */
+}
+
+main {
+  flex: 1; /* Pozwala main zajmować dostępne miejsce */
+}
+
