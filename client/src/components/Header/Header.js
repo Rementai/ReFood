@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { FaHome, FaUtensils, FaUser, FaSearch } from 'react-icons/fa';
+import { FaHome, FaUtensils, FaUser, FaSearch, FaBars, FaTimes } from 'react-icons/fa';
 import './Header.css';
 import ReFoodLogo from '../../images/Refood.jpg';
 
@@ -8,6 +8,11 @@ const Header = () => {
   const location = useLocation();
   const currentPage = location.pathname;
   const [isSearchActive, setIsSearchActive] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
     <header className="header">
@@ -20,7 +25,11 @@ const Header = () => {
           </div>
         </div>
 
-        <div className="header-right">
+        <div className="hamburger-menu" onClick={toggleMenu}>
+          {isMenuOpen ? <FaTimes /> : <FaBars />}
+        </div>
+
+        <div className={`header-right ${isMenuOpen ? 'open' : ''}`}>
           <Link to="/signup" className={`nav-item sign-up-link ${currentPage === '/signup' ? 'active' : ''}`}>
             SIGN UP
           </Link>
