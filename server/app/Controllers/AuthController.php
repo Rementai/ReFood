@@ -3,7 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\UserModel;
-use CodeIgniter\HTTP\Response;
+use Firebase\JWT\JWT;
 
 class AuthController extends BaseController
 {
@@ -44,13 +44,23 @@ class AuthController extends BaseController
         $user = $userModel->where('email', $email)->first();
         
         if ($user && password_verify($password, $user['password'])) {
-            $userModel->update($user['user_id'], ['last_login' => date('Y-m-d H:i:s')]);
-            
-            session()->set(['user_id' => $user['user_id']]);
-
-            return $this->response->setJSON(['message' => 'Login successful']);
+            // Use the env function to get the secret key
+            $key = env('AUTH_JWT_SECRET', 'default_secret_key'); // default value for safety
+    
+            $payload = [
+                'sub' => $user['user_id'],
+                'email' => $user['email'],
+                'iat' => time(),
+                'exp' => time() + 3600 // Token valid for one hour
+            ];
+    
+            $jwt = JWT::encode($payload, $key, 'HS256');
+    
+            return $this->response->setJSON([
+                'access_token' => $jwt,
+                'message' => 'Login successful'
+            ]);
         } else {
-
             return $this->response->setJSON(['error' => 'Invalid email or password'])->setStatusCode(401);
         }
     }

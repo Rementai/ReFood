@@ -9,13 +9,14 @@ function Login() {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('/login', {
+      const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
       if (response.ok) {
+        localStorage.setItem('access_token', data.access_token);
         alert(data.message);
       } else {
         alert(data.error);
@@ -23,7 +24,7 @@ function Login() {
     } catch (error) {
       console.error('Login error:', error);
     }
-  };
+};
 
   return (
     <div className="container">
