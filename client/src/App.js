@@ -5,8 +5,8 @@ import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home';
 import Recipes from './pages/Recipes';
-import Signup from './pages/Signup';
-import Login from './pages/Login';
+import Signup from './pages/Signup/Signup';
+import Login from './pages/Login/Login';
 
 
 function App() {

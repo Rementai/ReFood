@@ -1,0 +1,157 @@
+.container {
+    display: flex;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 825px;
+    height: 550px;
+    margin: auto;
+    margin-top: 50px;
+}
+
+.left-panel, .right-panel {
+    padding: 40px;
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.left-panel {
+    background-color: #fff;
+}
+
+.right-panel {
+    background: linear-gradient(135deg, #3fb505, #308c03);
+    color: white;
+}
+
+/* Nowe style dla wyrównania nagłówków */
+.left-panel h2, .right-panel h2 {
+    position: absolute;
+    top: 180px;
+    text-align: center;
+    width: 100%;
+}
+
+form, .right-panel p, .sign-up-button {
+    margin-top: 60px;
+}
+
+.right-panel p {
+    margin-top: 1px;
+    max-width: 350px;
+    text-align: center;
+}
+
+h2 {
+    margin-bottom: 20px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 300px;
+}
+
+input {
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #eef3f8;
+    border-radius: 3px;
+    background-color: #eef3f8;
+}
+
+/* Nowe style dla wyrównania przycisków */
+.sign-in-button, .sign-up-button {
+    position: absolute;
+    bottom: 120px; /* Ustawienie na tej samej wysokości w obu panelach */
+    left: 50%;     /* Wyśrodkowanie przycisku */
+    transform: translateX(-50%); /* Przesunięcie o 50% szerokości przycisku w lewo */
+    padding: 10px;
+    width: 50%;
+    font-size: 15px;
+    font-weight: bold;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.sign-in-button {
+    border: none;
+    background-color: #308c03;
+    color: white;
+}
+
+.sign-in-button:hover {
+    background-color: #333;
+    color: white;
+}
+
+.sign-up-button {
+    background-color: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+.sign-up-button:hover {
+    background-color: white;
+    color: #308c03;
+}
+
+/* Responsywność */
+@media (max-width: 1024px) {
+  .container {
+    width: 90%;
+    height: auto;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    height: auto;
+    width: 100%;
+    border-radius: 0;
+  }
+
+  .left-panel, .right-panel {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .right-panel {
+    padding: 40px 20px;
+  }
+
+  .sign-up-button {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 18px;
+    position: static; /* Przywraca normalne położenie w wersji mobilnej */
+    margin-top: 30px;
+  }
+
+  button[type="submit"] {
+    width: 100%;
+    position: static; /* Przywraca normalne położenie w wersji mobilnej */
+  }
+}
+
+@media (max-width: 480px) {
+  h2 {
+    font-size: 24px;
+  }
+
+  input, button, .sign-up-button {
+    font-size: 14px;
+    padding: 8px;
+  }
+
+  .right-panel {
+    padding: 30px 15px;
+  }
+}
