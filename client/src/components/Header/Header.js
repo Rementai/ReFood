@@ -40,7 +40,7 @@ const Header = () => {
 
         <div className={`header-right ${isMenuOpen ? 'open' : ''}`}>
           {isLoggedIn ? (
-            <button onClick={handleLogout} className="nav-item sign-up-link">
+            <button onClick={handleLogout} className="nav-item sign-up-link logout-button">
               Log out
             </button>
           ) : (

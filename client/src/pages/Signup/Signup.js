@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Signup.css';
 
 function Signup() {
@@ -8,6 +8,8 @@ function Signup() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -20,6 +22,7 @@ function Signup() {
       const data = await response.json();
       if (response.ok) {
         alert(data.message);
+        navigate('/login');
       } else {
         alert(data.error || 'Registration failed');
       }
