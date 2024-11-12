@@ -44,9 +44,8 @@ class AuthController extends BaseController
         $user = $userModel->where('email', $email)->first();
         
         if ($user && password_verify($password, $user['password'])) {
-            // Use the env function to get the secret key
-            $key = env('AUTH_JWT_SECRET', 'default_secret_key'); // default value for safety
-    
+            $key = env('AUTH_JWT_SECRET', 'default_secret_key');
+            
             $payload = [
                 'sub' => $user['user_id'],
                 'email' => $user['email'],

@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { login } from '../../store/authSlice'
 import './Login.css'
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -17,7 +21,9 @@ function Login() {
       const data = await response.json();
       if (response.ok) {
         localStorage.setItem('access_token', data.access_token);
+        dispatch(login());
         alert(data.message);
+        navigate('/');
       } else {
         alert(data.error);
       }
@@ -45,7 +51,7 @@ function Login() {
             onChange={(e) => setPassword(e.target.value)} 
             required 
           />
-          <button type="submit" className="sign-in-button">SIGN IN</button>
+          <button type="submit" className="sign-in-button">LOG IN</button>
         </form>
       </div>
       <div className="right-panel">

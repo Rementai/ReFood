@@ -1,4 +1,4 @@
-.container {
+.signup-container {
     display: flex;
     border-radius: 10px;
     overflow: hidden;
@@ -9,7 +9,7 @@
     margin-top: 50px;
 }
 
-.left-panel, .right-panel {
+.signup-left-panel, .signup-right-panel {
     padding: 40px;
     width: 50%;
     display: flex;
@@ -19,44 +19,37 @@
     position: relative;
 }
 
-.left-panel {
-    background-color: #fff;
-}
-
-.right-panel {
+.signup-left-panel {
     background: linear-gradient(135deg, #3fb505, #308c03);
     color: white;
 }
 
-.left-panel h2, .right-panel h2 {
+.signup-right-panel {
+    background-color: #fff;
+}
+
+.signup-left-panel h2, .signup-right-panel h2 {
     position: absolute;
     top: 150px;
     text-align: center;
     width: 100%;
 }
 
-form, .right-panel p, .sign-up-button {
+.signup-left-panel p {
     margin-top: 60px;
-}
-
-.right-panel p {
-    margin-top: 1px;
     max-width: 350px;
     text-align: center;
 }
 
-h2 {
-    margin-bottom: 20px;
-}
-
-form {
+.signup-right-panel form {
     display: flex;
     flex-direction: column;
     width: 100%;
     max-width: 300px;
+    margin-top: 60px;
 }
 
-input {
+.signup-right-panel input {
     margin-bottom: 10px;
     padding: 10px;
     font-size: 16px;
@@ -65,11 +58,11 @@ input {
     background-color: #eef3f8;
 }
 
-.sign-in-button, .sign-up-button {
+.signup-submit-button, .signup-login-button {
     position: absolute;
     bottom: 90px;
     left: 50%;
-    transform: translateX(-50%); 
+    transform: translateX(-50%);
     padding: 10px;
     width: 50%;
     font-size: 15px;
@@ -78,24 +71,24 @@ input {
     cursor: pointer;
 }
 
-.sign-in-button {
+.signup-submit-button {
     border: none;
     background-color: #308c03;
     color: white;
 }
 
-.sign-in-button:hover {
+.signup-submit-button:hover {
     background-color: #333;
     color: white;
 }
 
-.sign-up-button {
+.signup-login-button {
     background-color: transparent;
     border: 1px solid white;
     color: white;
 }
 
-.sign-up-button:hover {
-    background-color: white;
-    color: #308c03;
+.signup-login-button:hover {
+    background-color: #308c03;
+    color: white;
 }
