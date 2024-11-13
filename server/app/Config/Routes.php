@@ -8,3 +8,5 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('/', 'Home::index');
 $routes->post('register', 'AuthController::register');
 $routes->post('login', 'AuthController::login');
+$routes->get('/recipes/top-rated', 'RecipeController::topRated');
+$routes->get('/recipes/latest', 'RecipeController::latestRecipes');
