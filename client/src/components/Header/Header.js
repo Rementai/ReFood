@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { FaHome, FaUtensils, FaUser, FaSearch, FaBars, FaTimes } from 'react-icons/fa';
+import { logout } from '../../store/authSlice'
 import './Header.css';
 import ReFoodLogo from '../../images/Refood.jpg';
 
@@ -9,6 +11,13 @@ const Header = () => {
   const currentPage = location.pathname;
   const [isSearchActive, setIsSearchActive] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);  
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    localStorage.removeItem('access_token');
+    dispatch(logout());
+  };
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
@@ -30,9 +39,15 @@ const Header = () => {
         </div>
 
         <div className={`header-right ${isMenuOpen ? 'open' : ''}`}>
-          <Link to="/signup" className={`nav-item sign-up-link ${currentPage === '/signup' ? 'active' : ''}`}>
-            SIGN UP
-          </Link>
+          {isLoggedIn ? (
+            <button onClick={handleLogout} className="nav-item sign-up-link logout-button">
+              Log out
+            </button>
+          ) : (
+            <Link to="/signup" className={`nav-item sign-up-link ${currentPage === '/signup' ? 'active' : ''}`}>
+              SIGN UP
+            </Link>
+          )}
           <Link to="/" className={`nav-item ${currentPage === '/' ? 'active' : ''}`}>
             <FaHome className="icon" />
             <span>Home</span>
@@ -41,10 +56,17 @@ const Header = () => {
             <FaUtensils className="icon" />
             <span>Recipes</span>
           </Link>
-          <Link to="/login" className={`nav-item ${currentPage === '/login' ? 'active' : ''}`}>
-            <FaUser className="icon" />
-            <span>Log in</span>
-          </Link>
+          {isLoggedIn ? (
+            <Link to="/profile" className={`nav-item ${currentPage === '/profile' ? 'active' : ''}`}>
+              <FaUser className="icon" />
+              <span>Profile</span>
+            </Link>
+          ) : (
+            <Link to="/login" className={`nav-item ${currentPage === '/login' ? 'active' : ''}`}>
+              <FaUser className="icon" />
+              <span>Log in</span>
+            </Link>
+          )}
         </div>
       </div>
 
