@@ -8,8 +8,9 @@ function Signup() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState(null); // State for message
+  const [messageType, setMessageType] = useState(''); // 'success' or 'error'
   const navigate = useNavigate();
-
 
   const handleSignup = async (e) => {
     e.preventDefault();
@@ -20,19 +21,26 @@ function Signup() {
         body: JSON.stringify({ username, first_name: firstName, last_name: lastName, email, password }),
       });
       const data = await response.json();
+      
       if (response.ok) {
-        alert(data.message);
-        navigate('/login');
+        navigate('/login', { state: { message: 'Registration successful! You can now log in.' } });
       } else {
-        alert(data.error || 'Registration failed');
+        const errors = data.errors ? Object.values(data.errors).join(' ') : 'Registration failed';
+        setMessage(errors);
+        setMessageType('error');
+        setTimeout(() => setMessage(null), 5000);
       }
     } catch (error) {
+      setMessage('Signup error');
+      setMessageType('error');
       console.error('Signup error:', error);
+      setTimeout(() => setMessage(null), 5000);
     }
   };
 
   return (
     <div className="signup-container">
+      {message && <div className={`message ${messageType}`}>{message}</div>}
       <div className="signup-left-panel">
         <h2>Already a user?</h2>
         <p>Log in to your account</p>

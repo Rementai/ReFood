@@ -1,14 +1,25 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-import { login } from '../../store/authSlice'
-import './Login.css'
+import { login } from '../../store/authSlice';
+import './Login.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState('');
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+
+  useEffect(() => {
+    if (location.state?.message) {
+      setMessage(location.state.message);
+      setMessageType('success');
+      setTimeout(() => setMessage(null), 5000);
+    }
+  }, [location.state]);
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -22,18 +33,23 @@ function Login() {
       if (response.ok) {
         localStorage.setItem('access_token', data.access_token);
         dispatch(login());
-        alert(data.message);
-        navigate('/');
+        navigate('/', { state: { message: 'Logged in successfully!' } });
       } else {
-        alert(data.error);
+        setMessage(data.error || 'Login failed');
+        setMessageType('error');
       }
+      setTimeout(() => setMessage(null), 5000);
     } catch (error) {
       console.error('Login error:', error);
+      setMessage('An error occurred. Please try again.');
+      setMessageType('error');
+      setTimeout(() => setMessage(null), 5000);
     }
-};
+  };
 
   return (
     <div className="container">
+      {message && <div className={`message ${messageType}`}>{message}</div>}
       <div className="left-panel">
         <h2>Sign in</h2>
         <form onSubmit={handleLogin}>

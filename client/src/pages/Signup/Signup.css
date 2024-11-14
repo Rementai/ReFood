@@ -92,3 +92,27 @@
     background-color: #308c03;
     color: white;
 }
+
+.message {
+    position: absolute;
+    top: 178px;
+    left: 50%;
+    width: 43%;
+    transform: translateX(-50%);
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    z-index: 1000;
+}
+
+.message.success {
+    background-color: #1a5f1c;
+    color: white;
+}
+
+.message.error {
+    background-color: #f44336;
+    color: white;
+}
