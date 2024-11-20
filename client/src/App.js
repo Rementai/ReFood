@@ -6,7 +6,7 @@ import store from './store';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home';
-import Recipes from './pages/Recipes';
+import Recipes from './pages/Recipes/Recipes';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';

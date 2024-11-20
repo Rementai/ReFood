@@ -12,7 +12,7 @@ class RecipeController extends Controller
         $recipeModel = new RecipeModel();
         $recipes = $recipeModel->findAll();
 
-        return view('recipes/index', ['recipes' => $recipes]);
+        return $this->response->setJSON($recipes);
     }
 
     public function show($id)
@@ -21,90 +21,65 @@ class RecipeController extends Controller
         $recipe = $recipeModel->find($id);
         
         if (!$recipe) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException('Recipe not found');
+            
+            return $this->response->setJSON(['error' => 'Recipe not found'])->setStatusCode(404);
         }
 
-        return view('recipes/show', ['recipe' => $recipe]);
+        return $this->response->setJSON($recipe);
     }
 
     public function create()
     {
-        return view('recipes/create');
-    }
-
-    public function store()
-    {
         $recipeModel = new RecipeModel();
-        
+
+        $data = $this->request->getJSON(true);
+
         if (!$this->validate($recipeModel->validationRules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+
+            return $this->response->setJSON(['errors' => $this->validator->getErrors()])->setStatusCode(400);
         }
 
-        $data = [
-            'title' => $this->request->getPost('title'),
-            'description' => $this->request->getPost('description'),
-            'instructions' => $this->request->getPost('instructions'),
-            'prep_time' => $this->request->getPost('prep_time'),
-            'cook_time' => $this->request->getPost('cook_time'),
-            'difficulty' => $this->request->getPost('difficulty'),
-            'image' => $this->request->getPost('image'),
-            'user_id' => session()->get('user_id')
-        ];
-
+        $data['user_id'] = session()->get('user_id'); 
         $recipeModel->save($data);
 
-        return redirect()->to('/recipes')->with('message', 'Recipe successfully added!');
-    }
-
-    public function edit($id)
-    {
-        $recipeModel = new RecipeModel();
-        $recipe = $recipeModel->find($id);
-
-        if (!$recipe) {
-            throw new \CodeIgniter\Exceptions\PageNotFoundException('Recipe not found');
-        }
-
-        return view('recipes/edit', ['recipe' => $recipe]);
+        return $this->response->setJSON(['message' => 'Recipe successfully added!'])->setStatusCode(201);
     }
 
     public function update($id)
     {
         $recipeModel = new RecipeModel();
-        
+
+        $data = $this->request->getJSON(true);
+
         if (!$this->validate($recipeModel->validationRules)) {
-            return redirect()->back()->withInput()->with('errors', $this->validator->getErrors());
+
+            return $this->response->setJSON(['errors' => $this->validator->getErrors()])->setStatusCode(400);
         }
 
-        $data = [
-            'id' => $id,
-            'title' => $this->request->getPost('title'),
-            'description' => $this->request->getPost('description'),
-            'instructions' => $this->request->getPost('instructions'),
-            'prep_time' => $this->request->getPost('prep_time'),
-            'cook_time' => $this->request->getPost('cook_time'),
-            'difficulty' => $this->request->getPost('difficulty'),
-            'image' => $this->request->getPost('image')
-        ];
-
+        $data['id'] = $id;
         $recipeModel->save($data);
 
-        return redirect()->to('/recipes')->with('message', 'Recipe successfully updated!');
+        return $this->response->setJSON(['message' => 'Recipe successfully updated!']);
     }
 
     public function delete($id)
     {
         $recipeModel = new RecipeModel();
+
+        if (!$recipeModel->find($id)) {
+            return $this->response->setJSON(['error' => 'Recipe not found'])->setStatusCode(404);
+        }
+
         $recipeModel->delete($id);
 
-        return redirect()->to('/recipes')->with('message', 'Recipe successfully deleted!');
+        return $this->response->setJSON(['message' => 'Recipe successfully deleted!']);
     }
 
     public function topRated()
     {
         $recipeModel = new RecipeModel();
         $topRecipes = $recipeModel->getTopRatedRecipes();
-    
+
         return $this->response->setJSON($topRecipes);
     }
 
@@ -115,6 +90,4 @@ class RecipeController extends Controller
 
         return $this->response->setJSON($latestRecipes);
     }
-
-
 }
