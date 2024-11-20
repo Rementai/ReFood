@@ -10,7 +10,7 @@ class AuthController extends BaseController
     public function register()
     {
         $userModel = new UserModel();
-    
+        
         $password = $this->request->getVar('password');
         $data = [
             'username' => $this->request->getVar('username'),
@@ -19,7 +19,7 @@ class AuthController extends BaseController
             'email' => $this->request->getVar('email'),
             'password' => $userModel->hashPassword($password)
         ];
-    
+        
         if (!preg_match('/^(?=.*[A-Z])(?=.*\d)(?=.*[!"#$%&\'()*+,\-.:;<=>?@[\\\\\]^_{|}~]).{8,}$/', $password)) {
             return $this->response->setJSON([
                 'error' => 'Password must be at least 8 characters long, contain one uppercase letter, one digit, and one special character.'
@@ -27,13 +27,16 @@ class AuthController extends BaseController
         }
         
         if (!$userModel->validate($data)) {
-            return $this->response->setJSON(['errors' => $userModel->errors()])->setStatusCode(422);
+            return $this->response->setJSON([
+                'errors' => $userModel->errors()
+            ])->setStatusCode(422);
         }
-    
+
         $userModel->save($data);
-    
+
         return $this->response->setJSON(['message' => 'User registered successfully.']);
     }
+
     
     public function login()
     {
@@ -50,7 +53,7 @@ class AuthController extends BaseController
                 'sub' => $user['user_id'],
                 'email' => $user['email'],
                 'iat' => time(),
-                'exp' => time() + 3600 // Token valid for one hour
+                'exp' => time() + 3600
             ];
     
             $jwt = JWT::encode($payload, $key, 'HS256');
