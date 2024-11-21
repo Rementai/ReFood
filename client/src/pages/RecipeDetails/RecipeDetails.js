@@ -8,7 +8,7 @@ const RecipeDetails = () => {
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [servings, setServings] = useState(1); // Domyślnie ustawiamy 1 porcję
+  const [servings, setServings] = useState(1);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -62,7 +62,6 @@ const RecipeDetails = () => {
       });
   };
 
-  // Funkcja do zmiany liczby porcji
   const changeServings = (amount) => {
     if (servings + amount >= 1 && servings + amount <= 6) {
       setServings(servings + amount);
