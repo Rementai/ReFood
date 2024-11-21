@@ -1,0 +1,163 @@
+.recipe-details {
+  max-width: 1300px; /* Szerokość strony */
+  margin: 0 auto; /* Wyśrodkowanie */
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.recipe-header {
+  display: flex;
+  gap: 40px; /* Odstęp między sekcjami */
+  margin-top: 30px;
+  margin-bottom: 30px;
+  align-items: flex-start; /* Dopasowanie obrazka i tekstu */
+}
+
+.recipe-details-image {
+  width: 600px;
+}
+
+.recipe-details-image img {
+  width: 500px; /* Większy obrazek */
+  height: auto;
+  max-height: 300px;
+  margin-left: 50px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.recipe-info {
+  flex: 2; /* Zajmuje więcej miejsca */
+  margin-right: 50px;
+}
+
+.recipe-info h1 {
+  font-size: 2.5rem; /* Większy tytuł */
+  margin-bottom: 15px;
+  text-align: center;
+}
+
+.recipe-info p {
+  margin-bottom: 15px;
+  text-align: center;
+  font-size: 1.1rem;
+  line-height: 1.5; /* Poprawia czytelność */
+}
+
+.recipe-description {
+  font-size: 1.2rem;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+.recipe-body {
+  margin-top: 40px; /* Odstęp od górnej sekcji */
+  display: flex;
+  gap: 30px; /* Odstęp między instrukcjami a składnikami */
+  flex-wrap: wrap; /* Dopasowanie na mniejszych ekranach */
+}
+
+.recipe-instructions,
+.recipe-ingredients {
+  flex: 1; /* Obie sekcje zajmują równo miejsce */
+  min-width: 300px; /* Minimalna szerokość */
+}
+
+.recipe-instructions p {
+  margin-top: 5px; /* Odstęp między zdaniami */
+  line-height: 1.5; /* Dodatkowy odstęp między liniami w zdaniu */
+}
+
+.recipe-instructions h2,
+.recipe-ingredients h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
+.recipe-ingredients ul {
+  list-style: none;
+  padding: 0;
+}
+
+.recipe-ingredients ul li {
+  background: white;
+  margin: 5px 0;
+  padding: 10px;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.recipe-times {
+  display: flex;
+  justify-content: center; /* Wyśrodkowanie elementów */
+  gap: 20px; /* Odstęp między prep i cooking */
+  margin-bottom: 15px;
+}
+
+.time-item {
+  display: flex;
+  align-items: center;
+  font-size: 1.1rem;
+  color: #333;
+  gap: 5px; /* Odstęp między ikoną a tekstem */
+}
+
+.recipe-difficulty {
+  text-align: center; /* Wyśrodkowanie trudności */
+  margin-top: 10px;
+  font-size: 1.1rem;
+  color: #555;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px; /* Odstęp między ikoną a tekstem */
+}
+
+.recipe-difficulty svg {
+  color: #ff6600; /* Kolor ikony */
+}
+
+.instructions-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  height: 50px;
+}
+
+.instructions-header h2 {
+  margin: auto 0;
+}
+
+.ingredients-header {
+  display: flex;
+  justify-content: space-between; /* Rozmieszcza tytuł i kontrolkę porcji na przeciwległych stronach */
+  align-items: center; /* Wyrównuje pionowo */
+  margin-bottom: 10px; /* Odstęp między tytułem a składnikami */
+  height: 50px; /* Ustaw wysokość, jeśli nie ma określonej */
+}
+
+.ingredients-header h2 {
+  margin: auto 0; /* Automatyczny margines pionowy */
+}
+
+.servings-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.servings-control button {
+  background-color: #ebeaea;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  font-size: 1.2rem;
+  border-radius: 5px;
+}
+
+.servings-control span {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+

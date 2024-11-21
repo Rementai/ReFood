@@ -10,6 +10,7 @@ import Recipes from './pages/Recipes/Recipes';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
+import RecipeDetails from './pages/RecipeDetails/RecipeDetails'; // Import strony szczegółów
 
 function App() {
   return (
@@ -21,6 +22,7 @@ function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/recipes" element={<Recipes />} />
+              <Route path="/recipes/:id" element={<RecipeDetails />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />

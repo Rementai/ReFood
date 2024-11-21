@@ -15,19 +15,37 @@ class RecipeController extends Controller
         return $this->response->setJSON($recipes);
     }
 
-    public function show($id)
+    public function show($recipeId)
     {
         $recipeModel = new RecipeModel();
-        $recipe = $recipeModel->find($id);
-        
-        if (!$recipe) {
-            
+        $recipeData = $recipeModel->getRecipeWithIngredients($recipeId);
+
+        if (empty($recipeData)) {
             return $this->response->setJSON(['error' => 'Recipe not found'])->setStatusCode(404);
+        }
+
+        $recipe = [
+            'id' => $recipeData[0]['recipe_id'],
+            'title' => $recipeData[0]['title'],
+            'description' => $recipeData[0]['description'],
+            'instructions' => $recipeData[0]['instructions'],
+            'prep_time' => $recipeData[0]['prep_time'],
+            'cook_time' => $recipeData[0]['cook_time'],
+            'difficulty' => $recipeData[0]['difficulty'],
+            'image' => $recipeData[0]['image'],
+            'ingredients' => []
+        ];
+
+        foreach ($recipeData as $row) {
+            $recipe['ingredients'][] = [
+                'name' => $row['ingredient_name'],
+                'quantity' => $row['quantity'],
+                'unit' => $row['unit']
+            ];
         }
 
         return $this->response->setJSON($recipe);
     }
-
     public function create()
     {
         $recipeModel = new RecipeModel();
