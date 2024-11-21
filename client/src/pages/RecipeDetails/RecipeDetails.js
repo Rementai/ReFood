@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaClock, FaSignal, FaMinus, FaPlus } from 'react-icons/fa';
+import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf } from 'react-icons/fa';
 import { useParams } from "react-router-dom";
 import './RecipeDetails.css'
 
@@ -68,6 +68,34 @@ const RecipeDetails = () => {
     }
   };
 
+  const downloadShoppingList = async (id, servings) => {
+    try {
+      const response = await fetch(
+        `http://localhost:8080/recipes/shopping-list/${id}?servings=${servings}`,
+        {
+          method: 'GET',
+        }
+      );
+  
+      if (!response.ok) {
+        throw new Error("Failed to generate shopping list.");
+      }
+  
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `shopping_list_recipe_${id}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      console.error(err.message);
+    }
+  };
+  
+
   return (
     <div className="recipe-details">
       <div className="recipe-header">
@@ -103,22 +131,31 @@ const RecipeDetails = () => {
         </div>
 
         <div className="recipe-ingredients">
-          <div className="ingredients-header">
-            <h2>Ingredients</h2>
-            <div className="servings-control">
-              <button onClick={() => changeServings(-1)}><FaMinus /></button>
-              <span>{servings} Servings</span>
-              <button onClick={() => changeServings(1)}><FaPlus /></button>
-            </div>
-          </div>
+        <h2>Ingredients</h2>
+        <div className="servings-control">
+          <span>{servings} servings</span>
+          <button onClick={() => changeServings(-1)}><FaMinus /></button>
+          <button onClick={() => changeServings(1)}><FaPlus /></button>
+        </div>
+        <div className="ingredients-section">
           <ul>
             {recipe.ingredients.map((ingredient, index) => (
               <li key={index}>
-                {ingredient.quantity * servings} {ingredient.unit} {ingredient.name}
+                <span className="ingredient-name">{ingredient.name}</span>
+                <span className="ingredient-quantity">
+                  {ingredient.quantity * servings} {ingredient.unit}
+                </span>
               </li>
             ))}
           </ul>
         </div>
+        <button
+          onClick={() => downloadShoppingList(recipe.id, servings)}
+          className="generate-pdf-btn"
+        >
+          <FaRegFilePdf /> Generate shopping list
+        </button>
+      </div>
       </div>
     </div>
   );

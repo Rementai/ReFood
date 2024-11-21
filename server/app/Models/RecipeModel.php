@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class RecipeModel extends Model
 {
     protected $table = 'recipes';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'recipe_id';
     protected $allowedFields = [
         'title', 'description', 'instructions', 
         'prep_time', 'cook_time', 'difficulty', 'image', 

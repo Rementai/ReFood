@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 import './TopRatedRecipesSlider.css';
 import "slick-carousel/slick/slick.css"; 
@@ -7,6 +8,7 @@ import "slick-carousel/slick/slick-theme.css";
 
 const TopRatedRecipesSlider = () => {
     const [recipes, setRecipes] = useState([]);
+    const [isDragging, setIsDragging] = useState(false);
 
     useEffect(() => {
         axios.get('http://localhost:8080/recipes/top-rated')
@@ -24,19 +26,34 @@ const TopRatedRecipesSlider = () => {
         autoplaySpeed: 10000,
     };
 
+    const handleMouseDown = () => setIsDragging(false);
+    const handleMouseMove = () => setIsDragging(true);
+    const handleClick = (e) => {
+        if (isDragging) {
+            e.preventDefault();
+        }
+    };
+
     return (
         <div className="top-rated-recipes-slider">
             <Slider {...settings}>
                 {recipes.map((recipe) => (
                     <div key={recipe.recipe_id} className="recipe-slide">
-                        <div className="image-container">
-                            <img src={recipe.image} alt={recipe.title} className="recipe-image"/>
-                            <div className="overlay">
-                                <h3>{recipe.title}</h3>
-                                <p>{parseInt(recipe.prep_time) + parseInt(recipe.cook_time)} minutes</p>
-                                <p>{recipe.difficulty}</p>
+                        <Link
+                            to={`/recipes/${recipe.recipe_id}`}
+                            onMouseDown={handleMouseDown}
+                            onMouseMove={handleMouseMove}
+                            onClick={handleClick}
+                        >
+                            <div className="image-container">
+                                <img src={recipe.image} alt={recipe.title} className="recipe-image" />
+                                <div className="overlay">
+                                    <h3>{recipe.title}</h3>
+                                    <p>{parseInt(recipe.prep_time) + parseInt(recipe.cook_time)} minutes</p>
+                                    <p>{recipe.difficulty}</p>
+                                </div>
                             </div>
-                        </div>
+                        </Link>
                     </div>
                 ))}
             </Slider>

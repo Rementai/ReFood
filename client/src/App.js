@@ -10,7 +10,7 @@ import Recipes from './pages/Recipes/Recipes';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
-import RecipeDetails from './pages/RecipeDetails/RecipeDetails'; // Import strony szczegółów
+import RecipeDetails from './pages/RecipeDetails/RecipeDetails';
 
 function App() {
   return (

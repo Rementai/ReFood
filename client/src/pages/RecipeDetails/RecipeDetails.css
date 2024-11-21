@@ -11,6 +11,10 @@
   margin-top: 30px;
   margin-bottom: 30px;
   align-items: flex-start;
+  background-color: #f7f7f8;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .recipe-details-image {
@@ -33,12 +37,12 @@
 
 .recipe-info h1 {
   font-size: 2.5rem;
-  margin-bottom: 15px;
+  margin-bottom: 60px;
   text-align: center;
 }
 
 .recipe-info p {
-  margin-bottom: 15px;
+  margin-bottom: 60px;
   text-align: center;
   font-size: 1.1rem;
   line-height: 1.5;
@@ -48,44 +52,6 @@
   font-size: 1.2rem;
   color: #555;
   margin-bottom: 20px;
-}
-
-.recipe-body {
-  margin-top: 40px;
-  display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
-}
-
-.recipe-instructions,
-.recipe-ingredients {
-  flex: 1;
-  min-width: 300px;
-}
-
-.recipe-instructions p {
-  margin-top: 5px;
-  line-height: 1.5;
-}
-
-.recipe-instructions h2,
-.recipe-ingredients h2 {
-  font-size: 1.8rem;
-  margin-bottom: 15px;
-  align-items: center;
-}
-
-.recipe-ingredients ul {
-  list-style: none;
-  padding: 0;
-}
-
-.recipe-ingredients ul li {
-  background: white;
-  margin: 5px 0;
-  padding: 10px;
-  border-radius: 4px;
-  font-size: 1rem;
 }
 
 .recipe-times {
@@ -118,6 +84,51 @@
   color: #ff6600;
 }
 
+.recipe-body {
+  margin-top: 40px;
+  display: flex;
+  gap: 30px;
+  flex-wrap: wrap;
+}
+
+.recipe-instructions,
+.recipe-ingredients {
+  flex: 1;
+  min-width: 300px;
+}
+
+.recipe-instructions {
+  background-color: #edecee;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  align-self: flex-start;
+}
+
+.recipe-instructions p {
+  margin-top: 5px;
+  line-height: 1.5;
+  font-size: 1rem;
+  color: #333;
+}
+
+.recipe-instructions h2 {
+  font-size: 1.4rem;
+  margin-bottom: 15px;
+  color: #308c03;
+  text-align: center;
+}
+
+.recipe-instructions h2,
+.recipe-ingredients h2 {
+  font-size: 1.8rem;
+  margin-bottom: 15px;
+  align-items: center;
+}
+
 .instructions-header {
   display: flex;
   align-items: center;
@@ -129,35 +140,98 @@
   margin: auto 0;
 }
 
-.ingredients-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 10px;
-  height: 50px;
+.recipe-ingredients {
+  background-color: #d1f7bb;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  max-width: 500px;
+  margin: 0 auto;
 }
 
-.ingredients-header h2 {
-  margin: auto 0;
+.recipe-instructions h2,
+.recipe-ingredients h2 {
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  color: #308c03;
+  font-weight: bold;
 }
 
 .servings-control {
   display: flex;
+  gap: 30px;
   align-items: center;
-  gap: 10px;
-}
-
-.servings-control button {
-  background-color: #ebeaea;
-  border: none;
-  padding: 10px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  border-radius: 5px;
+  margin-bottom: 20px;
 }
 
 .servings-control span {
+  font-weight: bold;
+  color: #308c03;
+}
+
+.servings-control button {
+  background-color: #f8faf7;
+  border: none;
+  padding: 5px;
+  cursor: pointer;
   font-size: 1.2rem;
+  border-radius: 6px;
+  color: #308c03;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.servings-control button:hover {
+  background-color: #d4d4d4;
+}
+
+.ingredients-section h3 {
+  font-size: 1.2rem;
+  color: #308c03;
+  margin-bottom: 10px;
+}
+
+.recipe-ingredients ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.recipe-ingredients ul li {
+  display: flex;
+  justify-content: space-between;
+  background-color: #fff;
+  padding: 10px 15px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  font-size: 1rem;
+  color: #333;
+}
+
+.ingredient-name {
   font-weight: bold;
 }
 
+.ingredient-quantity {
+  color: #308c03;
+}
+
+.generate-pdf-btn {
+  background-color: #d1f7bb;
+  color: #308c03;
+  padding: 10px;
+  margin: 0 auto;
+  border: 1px solid #7eda49;
+  border-radius: 6px;
+  cursor: pointer;
+  display: block;
+  width: 250px;
+  text-align: center;
+  font-size: 1rem;
+}
+
+
+.generate-pdf-btn:hover {
+  background-color: #b4ee94;
+}
