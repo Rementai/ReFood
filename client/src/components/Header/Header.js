@@ -15,7 +15,6 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const handleLogout = () => {
-    localStorage.removeItem('access_token');
     dispatch(logout());
   };
 
