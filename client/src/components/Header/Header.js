@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
-import { FaHome, FaUtensils, FaUser, FaSearch, FaBars, FaTimes } from 'react-icons/fa';
+import { FaHome, FaUtensils, FaUser, FaBars, FaTimes } from 'react-icons/fa';
 import { logout } from '../../store/authSlice'
+import SearchBar from '../SearchBar/SearchBar';
 import './Header.css';
 import ReFoodLogo from '../../images/Refood.jpg';
 
 const Header = () => {
   const location = useLocation();
   const currentPage = location.pathname;
-  const [isSearchActive, setIsSearchActive] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isLoggedIn = useSelector((state) => state.auth.isLoggedIn);  
   const dispatch = useDispatch();
@@ -71,16 +71,7 @@ const Header = () => {
       </div>
 
       <div className="header-bottom">
-        <div className="search-bar-container">
-          <FaSearch className={`search-icon ${isSearchActive ? 'active' : ''}`} />
-          <input
-            type="text"
-            placeholder="Search recipes"
-            className="search-bar"
-            onFocus={() => setIsSearchActive(true)}
-            onBlur={() => setIsSearchActive(false)}
-          />
-        </div>
+        <SearchBar />
       </div>
     </header>
   );
