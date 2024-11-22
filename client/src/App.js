@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import './App.css';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
@@ -6,15 +6,16 @@ import store from './store';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Home from './pages/Home';
-import Recipes from './pages/Recipes/Recipes';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
 import RecipeDetails from './pages/RecipeDetails/RecipeDetails';
 import RecipesByCategory from './pages/RecipesByCategory/RecipesByCategory';
+const Recipes = lazy(() => import('./pages/Recipes/Recipes'))
 
 function App() {
   return (
+    <Suspense fallback={<div>Loading...</div>}>
     <Provider store={store}>
       <Router>
         <div className="App">
@@ -34,6 +35,7 @@ function App() {
         </div>
       </Router>
     </Provider>
+    </Suspense>
   );
 }
 

@@ -24,17 +24,22 @@ function CategoryList() {
 
   return (
     <div className="categories">
-      <h2>Recipe Categories</h2>
-      <ul>
+      <h2>Categories</h2>
+      <div className="category-grid">
         {categories.map((category) => (
-          <li key={category.category_id}>
+          <div key={category.category_id} className="category-card">
             <Link to={`/recipes/category/${category.category_id}`}>
-              <h3>{category.name}</h3>
+              <div className="category-icon">
+                <img
+                  src={category.icon}
+                  alt={category.name}
+                />
+              </div>
+              <div className="category-name">{category.name}</div>
             </Link>
-            <p>{category.description}</p>
-          </li>
+          </div>
         ))}
-      </ul>
+      </div>
     </div>
   );
 }
