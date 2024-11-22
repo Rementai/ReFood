@@ -1,0 +1,15 @@
+.categories {
+    margin: 20px 0;
+  }
+  
+  .categories ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .categories li {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  

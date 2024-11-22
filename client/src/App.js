@@ -11,6 +11,7 @@ import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
 import Profile from './pages/Profile/Profile';
 import RecipeDetails from './pages/RecipeDetails/RecipeDetails';
+import RecipesByCategory from './pages/RecipesByCategory/RecipesByCategory';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/recipes" element={<Recipes />} />
               <Route path="/recipes/:id" element={<RecipeDetails />} />
+              <Route path="/recipes/category/:categoryId" element={<RecipesByCategory />} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/profile" element={<Profile />} />
