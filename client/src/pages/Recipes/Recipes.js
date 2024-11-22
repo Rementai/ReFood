@@ -35,9 +35,9 @@ function Recipes() {
 
   return (
     <div className="recipes">
-      {recipes.map((recipe) => (
-        <RecipeCard key={recipe.id} recipe={recipe} />
-      ))}
+      {recipes.map((recipe) => {
+        return <RecipeCard key={recipe.recipe_id || recipe.title} recipe={recipe} />;
+      })}
     </div>
   );
 }

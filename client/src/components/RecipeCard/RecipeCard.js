@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './RecipeCard.css'
 
 function truncateText(text, maxLength) {
@@ -11,6 +12,7 @@ function truncateText(text, maxLength) {
   function RecipeCard({ recipe }) {
     return (
       <div className="recipe-card">
+        <Link to={`/recipes/${recipe.recipe_id}`} className="recipe-card-link">
         <img src={recipe.image} alt={recipe.title} className="recipe-card__image" />
         <div className="recipe-card__content">
           <h2>{truncateText(recipe.title, 26)}</h2>
@@ -20,6 +22,7 @@ function truncateText(text, maxLength) {
           <p><strong>Cook Time:</strong> {recipe.cook_time} mins</p>
           <p><strong>Rating:</strong> {recipe.average_rating || 'N/A'}</p>
         </div>
+        </Link>
       </div>
     );
   }
