@@ -174,5 +174,20 @@ class RecipeController extends Controller
         $pdf->Output('shopping_list.pdf', 'I');
     }
     
+    public function getRecipesByCategory($categoryId)
+    {
+        $recipeModel = new RecipeModel();
+        $db = \Config\Database::connect();
+
+        $builder = $db->table('recipes');
+        $builder->select('recipes.*');
+        $builder->join('recipe_categories', 'recipes.recipe_id = recipe_categories.recipe_id');
+        $builder->where('recipe_categories.category_id', $categoryId);
+
+        $query = $builder->get();
+        $recipes = $query->getResultArray();
+
+        return $this->response->setJSON($recipes);
+    }
 
 }
