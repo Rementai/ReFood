@@ -1,9 +1,22 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { jwtDecode } from 'jwt-decode';
+
+const isTokenValid = (token) => {
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.exp * 1000 > Date.now();
+  } catch (e) {
+    return false;
+  }
+};
 
 const authSlice = createSlice({
   name: 'auth',
   initialState: {
-    isLoggedIn: !!localStorage.getItem('access_token'),
+    isLoggedIn: (() => {
+      const token = localStorage.getItem('access_token');
+      return token && isTokenValid(token);
+    })(),
   },
   reducers: {
     login: (state) => {
@@ -11,6 +24,7 @@ const authSlice = createSlice({
     },
     logout: (state) => {
       state.isLoggedIn = false;
+      localStorage.removeItem('access_token');
     },
   },
 });
