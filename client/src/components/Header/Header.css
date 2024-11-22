@@ -106,37 +106,9 @@
 .header-bottom {
   display: flex;
   justify-content: center;
+  align-items: center;
   padding: 8px 15%;
   border-top: 1px solid #e0e0e0;
-}
-
-.search-bar-container {
-  position: relative;
-  width: 100%;
-  max-width: 400px;
-}
-
-.search-icon {
-  position: absolute;
-  top: 40%;
-  left: 10px;
-  transform: translateY(-50%);
-  color: #555;
-}
-
-.search-icon.active {
-  color: #308c03;
-}
-
-.search-bar {
-  width: 100%;
-  padding: 12px 36px;
-  border-radius: 6px;
-  border: 1px solid #eef3f8;
-  font-size: 14px;
-  background-color: #eef3f8;
-  color: #333;
-  outline: none;
 }
 
 /* Responsiveness */
@@ -173,17 +145,9 @@
     padding: 10px 5%;
   }
 
-  .search-bar-container {
-    max-width: 100%;
-  }
-
   .nav-item {
     font-size: 14px;
     margin: 10px 0;
-  }
-
-  .search-bar {
-    width: 100%;
   }
 
   .logo img {
