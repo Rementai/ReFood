@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
-import './Recipes.css'
+import Loader from '../../components/Loader/Loader';
+import './Recipes.css';
 
 function Recipes() {
   const [recipes, setRecipes] = useState([]);
@@ -26,7 +27,7 @@ function Recipes() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (error) {

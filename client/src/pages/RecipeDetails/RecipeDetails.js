@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf } from 'react-icons/fa';
 import { useParams } from "react-router-dom";
-import './RecipeDetails.css'
+import Loader from "../../components/Loader/Loader";
+import './RecipeDetails.css';
 
 const RecipeDetails = () => {
   const { id } = useParams();
@@ -29,7 +30,7 @@ const RecipeDetails = () => {
     fetchRecipe();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loader />;
   if (error) return <p>Error: {error}</p>;
 
   const getDifficultyColor = (difficulty) => {
@@ -94,7 +95,6 @@ const RecipeDetails = () => {
       console.error(err.message);
     }
   };
-  
 
   return (
     <div className="recipe-details">

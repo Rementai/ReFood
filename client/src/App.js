@@ -8,6 +8,7 @@ import store from './store';
 import { Provider } from 'react-redux';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
+import Loader from './components/Loader/Loader';
 import Home from './pages/Home';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
@@ -62,9 +63,9 @@ export default function WrappedApp() {
   return (
     <Provider store={store}>
       <Router>
-        <Suspense fallback={<div>Loading...</div>}>
-          <App />
-        </Suspense>
+      <Suspense fallback={<Loader />}>
+        <App />
+      </Suspense>
       </Router>
     </Provider>
   );

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Slider from 'react-slick';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import Loader from '../Loader/Loader';
 import './LatestRecipesSlider.css';
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
@@ -9,11 +10,18 @@ import "slick-carousel/slick/slick-theme.css";
 const LatestRecipesSlider = () => {
     const [recipes, setRecipes] = useState([]);
     const [isDragging, setIsDragging] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios.get('http://localhost:8080/recipes/latest')
-            .then(response => setRecipes(response.data))
-            .catch(error => console.error("Error fetching latest recipes:", error));
+            .then(response => {
+                setRecipes(response.data);
+                setLoading(false);
+            })
+            .catch(error => {
+                console.error("Error fetching latest recipes:", error);
+                setLoading(false);
+            });
     }, []);
 
     const settings = {
@@ -32,6 +40,10 @@ const LatestRecipesSlider = () => {
             e.preventDefault();
         }
     };
+
+    if (loading) {
+        return <Loader />;
+    }
 
     return (
         <div className="latest-recipes-slider">
