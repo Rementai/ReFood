@@ -18,3 +18,7 @@ $routes->get('/recipes/search', 'RecipeController::search');
 $routes->get('/recipes/category/(:num)', 'RecipeController::getRecipesByCategory/$1');
 
 $routes->get('/categories', 'CategoryController::index');
+
+$routes->get('/user/info', 'UserController::getUserInfo');
+$routes->post('/user/update-username', 'UserController::updateUsername');
+$routes->post('/user/update-password', 'UserController::updatePassword');
