@@ -148,7 +148,7 @@ const Profile = () => {
             </div>
           </div>
           <div className="profile-form">
-            <h2>Change credentials</h2>
+            <h2 className="profile-header-text">Change credentials</h2>
             {message && <p className="success-message">{message}</p>}
             {error && <p className="error-message">{error}</p>}
             <label>
@@ -160,7 +160,7 @@ const Profile = () => {
               />
             </label>
 
-            <h3>Change Password</h3>
+            <h3 className="profile-header-text">Change Password</h3>
             <label>
               New Password:
               <input
