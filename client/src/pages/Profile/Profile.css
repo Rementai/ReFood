@@ -7,7 +7,7 @@
   
   .profile-header {
     width: 100%;
-    padding: 40px;
+    padding: 35px;
     text-align: center;
     background: linear-gradient(135deg, #308c03, #60b344);
     position: relative;
@@ -96,7 +96,7 @@
   
   .profile-info-card {
     flex: 3;
-    height: 500px;
+    height: 525px;
     background: #fff;
     padding: 20px;
     border-radius: 12px;
@@ -125,7 +125,7 @@
     color: #777;
   }
   
-  .profile-form h2 {
+  .profile-form h2, h3 {
     text-align: center;
     margin-bottom: 20px;
     font-weight: bold;

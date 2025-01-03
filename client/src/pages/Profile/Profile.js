@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import Loader from "../../components/Loader/Loader";
 import "./Profile.css";
 
 const Profile = () => {
@@ -10,6 +11,7 @@ const Profile = () => {
   const [likedRecipes, setLikedRecipes] = useState(0);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUsername = async () => {
@@ -30,18 +32,54 @@ const Profile = () => {
       } catch (err) {
         console.error(err);
         setError("Failed to fetch user information.");
+      } finally {
+        setLoading(false);
       }
     };
 
     fetchUsername();
   }, []);
 
-  const handleSaveChanges = async () => {
+  useEffect(() => {
+    if (message || error) {
+      const timer = setTimeout(() => {
+        setMessage("");
+        setError("");
+      }, 5000);
+
+      return () => clearTimeout(timer);
+    }
+  }, [message, error]);
+
+  const handleUpdate = async () => {
     setMessage("");
     setError("");
 
-    if (newUsername === username) {
-      setMessage("No changes made to the username.");
+    const updates = [];
+
+    if (newUsername !== username) {
+      updates.push({
+        type: "username",
+        endpoint: "http://localhost:8080/user/update-username",
+        data: { username: newUsername },
+      });
+    }
+
+    if (password || repeatPassword) {
+      if (password !== repeatPassword) {
+        setError("Passwords do not match.");
+        return;
+      }
+
+      updates.push({
+        type: "password",
+        endpoint: "http://localhost:8080/user/update-password",
+        data: { password, repeat_password: repeatPassword },
+      });
+    }
+
+    if (updates.length === 0) {
+      setMessage("No changes made.");
       return;
     }
 
@@ -51,61 +89,33 @@ const Profile = () => {
         throw new Error("Token is missing");
       }
 
-      const response = await axios.post(
-        "http://localhost:8080/user/update-username",
-        { username: newUsername },
-        {
+      for (const update of updates) {
+        const response = await axios.post(update.endpoint, update.data, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
+        });
+
+        if (update.type === "username") {
+          setUsername(newUsername);
+          setMessage(response.data.message || "Username updated successfully!");
+        } else if (update.type === "password") {
+          setPassword("");
+          setRepeatPassword("");
+          setMessage(response.data.message || "Password updated successfully!");
         }
-      );
-
-      setUsername(newUsername);
-      setMessage(response.data.message || "Username updated successfully!");
-    } catch (err) {
-      console.error(err);
-      setError(
-        err.response?.data?.error || "An error occurred while updating the username."
-      );
-    }
-  };
-
-  const handlePasswordChange = async () => {
-    setMessage("");
-    setError("");
-
-    if (password !== repeatPassword) {
-      setError("Passwords do not match.");
-      return;
-    }
-
-    try {
-      const token = localStorage.getItem("access_token");
-      if (!token) {
-        throw new Error("Token is missing");
       }
-
-      const response = await axios.post(
-        "http://localhost:8080/user/update-password",
-        { password, repeat_password: repeatPassword },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      setMessage(response.data.message || "Password updated successfully!");
-      setPassword("");
-      setRepeatPassword("");
     } catch (err) {
       console.error(err);
       setError(
-        err.response?.data?.error || "An error occurred while updating the password."
+        err.response?.data?.error || "An error occurred while updating your information."
       );
     }
   };
+
+  if (loading) {
+    return <Loader />;
+  }
 
   return (
     <div className="profile-page">
@@ -149,9 +159,8 @@ const Profile = () => {
                 onChange={(e) => setNewUsername(e.target.value)}
               />
             </label>
-            <button onClick={handleSaveChanges}>Update Username</button>
 
-            <h2>Change Password</h2>
+            <h3>Change Password</h3>
             <label>
               New Password:
               <input
@@ -168,7 +177,8 @@ const Profile = () => {
                 onChange={(e) => setRepeatPassword(e.target.value)}
               />
             </label>
-            <button onClick={handlePasswordChange}>Update Password</button>
+
+            <button onClick={handleUpdate}>Update</button>
           </div>
         </div>
       </div>
