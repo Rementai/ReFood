@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf } from 'react-icons/fa';
+import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf, FaHeart, FaRegHeart } from 'react-icons/fa';
 import { useParams } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import './RecipeDetails.css';
@@ -10,6 +10,7 @@ const RecipeDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [servings, setServings] = useState(1);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -30,9 +31,58 @@ const RecipeDetails = () => {
     fetchRecipe();
   }, [id]);
 
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/favorites/list`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          },
+        });
+        if (!response.ok) throw new Error("Failed to fetch favorites");
+  
+        const favorites = await response.json();
+        setIsFavorite(favorites.some((fav) => parseInt(fav.recipe_id) === parseInt(id)));
+      } catch (err) {
+        console.error("Error checking favorite status:", err.message);
+      }
+    };
+  
+    checkFavoriteStatus();
+  }, [id]);
+  
   if (loading) return <Loader />;
   if (error) return <p>Error: {error}</p>;
 
+  const toggleFavorite = async () => {
+    try {
+      const url = `http://localhost:8080/favorites/${isFavorite ? 'remove' : 'add'}`;
+      const response = await fetch(url, {
+        method: isFavorite ? 'DELETE' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({ recipe_id: parseInt(id) }),
+      });
+  
+      if (!response.ok) throw new Error(isFavorite ? 'Failed to remove favorite' : 'Failed to add favorite');
+  
+      const refreshFavorites = await fetch(`http://localhost:8080/favorites/list`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+  
+      if (!refreshFavorites.ok) throw new Error("Failed to refresh favorites");
+      const updatedFavorites = await refreshFavorites.json();
+  
+      setIsFavorite(updatedFavorites.some((fav) => parseInt(fav.recipe_id) === parseInt(id)));
+    } catch (err) {
+      console.error("Error toggling favorite:", err.message);
+    }
+  };
+  
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case 'easy':
@@ -104,6 +154,12 @@ const RecipeDetails = () => {
         </div>
         <div className="recipe-info">
           <h1>{recipe.title}</h1>
+          <button
+            className={`favorite-btn ${isFavorite ? 'favorite' : ''}`}
+            onClick={toggleFavorite}
+          >
+            {isFavorite ? <FaHeart /> : <FaRegHeart />}
+          </button>
           <p className="recipe-description">{recipe.description}</p>
           <div className="recipe-times">
             <div className="time-item">

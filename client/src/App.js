@@ -16,6 +16,7 @@ import Profile from './pages/Profile/Profile';
 import RecipeDetails from './pages/RecipeDetails/RecipeDetails';
 import RecipesByCategory from './pages/RecipesByCategory/RecipesByCategory';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import Favorites from './pages/Favorites/Favorites';
 
 const Recipes = lazy(() => import('./pages/Recipes/Recipes'));
 
@@ -52,6 +53,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/liked"
+            element={
+              <ProtectedRoute>
+                <Favorites/>
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
       <Footer />
@@ -63,9 +72,9 @@ export default function WrappedApp() {
   return (
     <Provider store={store}>
       <Router>
-      <Suspense fallback={<Loader />}>
-        <App />
-      </Suspense>
+        <Suspense fallback={<Loader />}>
+          <App />
+        </Suspense>
       </Router>
     </Provider>
   );

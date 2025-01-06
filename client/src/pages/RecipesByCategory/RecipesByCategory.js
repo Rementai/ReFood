@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import RecipeCard from '../../components/RecipeCard/RecipeCard';
+import Loader from '../../components/Loader/Loader';
 import '../Recipes/Recipes.css';
 
 function RecipesByCategory() {
@@ -28,7 +29,7 @@ function RecipesByCategory() {
   }, [categoryId]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (error) {
@@ -37,7 +38,6 @@ function RecipesByCategory() {
 
   return (
     <div className="recipes">
-        <h2></h2>
       {recipes.map((recipe) => (
         <RecipeCard key={recipe.recipe_id} recipe={recipe} />
       ))}

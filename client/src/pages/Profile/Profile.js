@@ -14,30 +14,41 @@ const Profile = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchUsername = async () => {
+    const fetchUserData = async () => {
       try {
         const token = localStorage.getItem("access_token");
         if (!token) {
           throw new Error("Token is missing");
         }
 
-        const response = await axios.get("http://localhost:8080/user/info", {
+        const userResponse = await axios.get("http://localhost:8080/user/info", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
 
-        setUsername(response.data.username);
-        setNewUsername(response.data.username);
+        setUsername(userResponse.data.username);
+        setNewUsername(userResponse.data.username);
+
+        const favoritesResponse = await axios.get(
+          "http://localhost:8080/favorites/count",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setLikedRecipes(favoritesResponse.data.count);
       } catch (err) {
         console.error(err);
-        setError("Failed to fetch user information.");
+        setError("Failed to fetch user or favorites information.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchUsername();
+    fetchUserData();
   }, []);
 
   useEffect(() => {
