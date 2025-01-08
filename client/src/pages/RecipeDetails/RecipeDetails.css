@@ -236,14 +236,6 @@
   background-color: #b4ee94;
 }
 
-.favorite-btn {
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 2rem;
-  color: gray;
-}
-
 .favorite-btn.favorite {
   color: red;
 }
@@ -252,3 +244,28 @@
 .favorite-btn:hover {
   color: #ff6666;
 }
+
+.button-container {
+  display: flex;
+  justify-content: center; 
+  gap: 30px;
+  margin-bottom: 20px;
+}
+
+.rating-button button {
+  background: none;
+  border: none;
+  color: #ffc107;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 2rem;
+}
+
+.favorite-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  color: gray;
+}
+

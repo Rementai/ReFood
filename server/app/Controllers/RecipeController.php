@@ -4,6 +4,9 @@ namespace App\Controllers;
 
 use App\Models\RecipeModel;
 use CodeIgniter\Controller;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use App\Models\UserModel;
 
 class RecipeController extends Controller
 {
@@ -190,4 +193,40 @@ class RecipeController extends Controller
         return $this->response->setJSON($recipes);
     }
 
+    public function getUserIdFromToken()
+    {
+        $authHeader = $this->request->getHeader('Authorization');
+        if (!$authHeader) {
+            log_message('error', 'Authorization header missing.');
+            return null;
+        }
+    
+        $token = explode(' ', $authHeader->getValue())[1];
+        $key = env('AUTH_JWT_SECRET', 'default_secret_key');
+    
+        try {
+            $decoded = JWT::decode($token, new Key($key, 'HS256'));
+            return $decoded->sub;
+        } catch (\Exception $e) {
+            log_message('error', 'JWT decoding failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function rateRecipe()
+    {
+        $recipeId = $this->request->getVar('recipe_id');
+        $userId = $this->getUserIdFromToken();
+        $rating = $this->request->getVar('rating');
+
+        $recipeModel = new \App\Models\RecipeModel();
+
+        if (!$recipeModel->find($recipeId)) {
+            return $this->response->setJSON(['error' => 'Recipe not found'])->setStatusCode(404);
+        }
+
+        $recipeModel->addRating($recipeId, $userId, $rating);
+
+        return $this->response->setJSON(['message' => 'Rating added successfully']);
+    }
 }

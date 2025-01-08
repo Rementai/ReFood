@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf, FaHeart, FaRegHeart } from 'react-icons/fa';
+import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf, FaHeart, FaRegHeart, FaRegStar } from 'react-icons/fa';
 import { useParams } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
+import RatingModal from "../../components/RatingModal/RatingModal";
 import './RecipeDetails.css';
 
 const RecipeDetails = () => {
@@ -11,6 +12,7 @@ const RecipeDetails = () => {
   const [error, setError] = useState(null);
   const [servings, setServings] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
 
   useEffect(() => {
     const fetchRecipe = async () => {
@@ -146,6 +148,26 @@ const RecipeDetails = () => {
     }
   };
 
+  const handleRatingSubmit = async (recipeId, userId, rating) => {
+    try {
+      const response = await fetch("http://localhost:8080/recipes/rate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({ recipe_id: recipeId, user_id: userId, rating }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit rating");
+      }
+      alert("Thank you for rating!");
+    } catch (error) {
+      console.error(error.message);
+    }
+  };
+
   return (
     <div className="recipe-details">
       <div className="recipe-header">
@@ -154,12 +176,17 @@ const RecipeDetails = () => {
         </div>
         <div className="recipe-info">
           <h1>{recipe.title}</h1>
+          <div className="button-container">
           <button
             className={`favorite-btn ${isFavorite ? 'favorite' : ''}`}
             onClick={toggleFavorite}
           >
             {isFavorite ? <FaHeart /> : <FaRegHeart />}
           </button>
+          <div className="rating-button">
+            <button onClick={() => setIsRatingModalOpen(true)}><FaRegStar /></button>
+          </div>
+        </div>
           <p className="recipe-description">{recipe.description}</p>
           <div className="recipe-times">
             <div className="time-item">
@@ -213,6 +240,13 @@ const RecipeDetails = () => {
         </button>
       </div>
       </div>
+      <RatingModal
+        isOpen={isRatingModalOpen}
+        onClose={() => setIsRatingModalOpen(false)}
+        recipeId={id}
+        userId={localStorage.getItem("user_id")}
+        onRatingSubmit={handleRatingSubmit}
+      />
     </div>
   );
 };

@@ -14,6 +14,7 @@ $routes->get('/recipes/(:num)', 'RecipeController::show/$1');
 $routes->get('/recipes/shopping-list/(:num)', 'RecipeController::generateShoppingList/$1');
 $routes->get('/recipes/search', 'RecipeController::search');
 $routes->get('/recipes/category/(:num)', 'RecipeController::getRecipesByCategory/$1');
+$routes->post('recipes/rate', 'RecipeController::rateRecipe');
 $routes->get('/categories', 'CategoryController::index');
 
 $routes->post('register', 'AuthController::register');
