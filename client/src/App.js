@@ -61,6 +61,14 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/add-recipe"
+            element={
+              <ProtectedRoute>
+                
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
       <Footer />

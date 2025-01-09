@@ -12,11 +12,11 @@
   
   .modal-content {
     background: white;
-    padding: 100px;
+    padding: 70px;
     border-radius: 12px;
     font-size: 24px;
     text-align: center;
-    width: 600px;
+    width: 500px;
   }
   
   .rating-stars .star {
@@ -31,7 +31,7 @@
   .modal-actions button {
     margin-top: 20px;
     margin-inline: 20px;
-    padding: 10px 20px;
+    padding: 12px 35px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
