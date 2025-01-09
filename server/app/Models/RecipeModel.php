@@ -63,13 +63,11 @@ class RecipeModel extends Model
             ->getRow();
 
         if ($existingRating) {
-            // Update the existing rating
             $this->db->table('recipe_ratings')
                 ->where('recipe_id', $recipeId)
                 ->where('user_id', $userId)
                 ->update(['rating' => $rating]);
         } else {
-            // Insert a new rating
             $this->db->table('recipe_ratings')->insert([
                 'recipe_id' => $recipeId,
                 'user_id' => $userId,
@@ -77,7 +75,6 @@ class RecipeModel extends Model
             ]);
         }
 
-        // Update the average rating
         $this->updateAverageRating($recipeId);
     }
 

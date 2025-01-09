@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf, FaHeart, FaRegHeart, FaRegStar } from 'react-icons/fa';
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import RatingModal from "../../components/RatingModal/RatingModal";
 import './RecipeDetails.css';
 
 const RecipeDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,6 +19,8 @@ const RecipeDetails = () => {
   useEffect(() => {
     const fetchUserRating = async () => {
       try {
+        const token = localStorage.getItem('access_token');
+        if (!token) return;
         const response = await fetch(`http://localhost:8080/recipes/rating/${id}`, {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('access_token')}`,
@@ -61,6 +64,9 @@ const RecipeDetails = () => {
 
   useEffect(() => {
     const checkFavoriteStatus = async () => {
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+
       try {
         const response = await fetch(`http://localhost:8080/favorites/list`, {
           headers: {
@@ -83,6 +89,12 @@ const RecipeDetails = () => {
   if (error) return <p>Error: {error}</p>;
 
   const toggleFavorite = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
     try {
       const url = `http://localhost:8080/favorites/${isFavorite ? 'remove' : 'add'}`;
       const response = await fetch(url, {
@@ -175,6 +187,12 @@ const RecipeDetails = () => {
   };
 
   const handleRatingSubmit = async (recipeId, userId, rating) => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
     try {
       const response = await fetch("http://localhost:8080/recipes/rate", {
         method: "POST",
