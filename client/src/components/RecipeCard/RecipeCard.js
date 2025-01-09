@@ -20,7 +20,6 @@ function truncateText(text, maxLength) {
           <p><strong>Difficulty:</strong> {recipe.difficulty}</p>
           <p><strong>Prep Time:</strong> {recipe.prep_time} mins</p>
           <p><strong>Cook Time:</strong> {recipe.cook_time} mins</p>
-          <p><strong>Rating:</strong> {recipe.average_rating || 'N/A'}</p>
         </div>
         </Link>
       </div>

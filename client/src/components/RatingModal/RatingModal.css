@@ -1,0 +1,49 @@
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .modal-content {
+    background: white;
+    padding: 70px;
+    border-radius: 12px;
+    font-size: 24px;
+    text-align: center;
+    width: 500px;
+  }
+  
+  .rating-stars .star {
+    font-size: 64px;
+    cursor: pointer;
+  }
+  
+  .rating-stars .star.selected {
+    color: gold;
+  }
+  
+  .modal-actions button {
+    margin-top: 20px;
+    margin-inline: 20px;
+    padding: 12px 35px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+  }
+  
+  .modal-actions button:first-child {
+    background: #28a745;
+    color: white;
+  }
+  
+  .modal-actions button:last-child {
+    background: #dc3545;
+    color: white;
+  }
+  

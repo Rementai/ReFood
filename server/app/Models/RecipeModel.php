@@ -53,5 +53,52 @@ class RecipeModel extends Model
                     ->limit($limit)
                     ->findAll();
     }
+
+    public function addRating($recipeId, $userId, $rating)
+    {
+        $existingRating = $this->db->table('recipe_ratings')
+            ->where('recipe_id', $recipeId)
+            ->where('user_id', $userId)
+            ->get()
+            ->getRow();
+
+        if ($existingRating) {
+            $this->db->table('recipe_ratings')
+                ->where('recipe_id', $recipeId)
+                ->where('user_id', $userId)
+                ->update(['rating' => $rating]);
+        } else {
+            $this->db->table('recipe_ratings')->insert([
+                'recipe_id' => $recipeId,
+                'user_id' => $userId,
+                'rating' => $rating,
+            ]);
+        }
+
+        $this->updateAverageRating($recipeId);
+    }
+
+    public function updateAverageRating($recipeId)
+    {
+        $query = $this->db->table('recipe_ratings')
+                        ->selectAvg('rating', 'average_rating')
+                        ->where('recipe_id', $recipeId)
+                        ->get();
+
+        $averageRating = $query->getRow()->average_rating;
+
+        $this->update($recipeId, ['average_rating' => $averageRating]);
+    }
+
+    public function getUserRating($recipeId, $userId)
+    {
+        $query = $this->db->table('recipe_ratings')
+                        ->select('rating')
+                        ->where('recipe_id', $recipeId)
+                        ->where('user_id', $userId)
+                        ->get();
+
+        return $query->getRow() ? $query->getRow()->rating : null;
+    }
 }
 

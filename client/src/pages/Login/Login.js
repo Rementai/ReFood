@@ -34,6 +34,7 @@ function Login() {
         localStorage.setItem('access_token', data.access_token);
         dispatch(login());
         navigate('/', { state: { message: 'Logged in successfully!' } });
+        console.log(data.access_token);
       } else {
         setMessage(data.error || 'Login failed');
         setMessageType('error');

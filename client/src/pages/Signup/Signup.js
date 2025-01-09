@@ -8,8 +8,8 @@ function Signup() {
   const [lastName, setLastName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [message, setMessage] = useState(null); // State for message
-  const [messageType, setMessageType] = useState(''); // 'success' or 'error'
+  const [message, setMessage] = useState(null);
+  const [messageType, setMessageType] = useState(''); 
   const navigate = useNavigate();
 
   const handleSignup = async (e) => {

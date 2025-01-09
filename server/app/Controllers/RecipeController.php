@@ -4,6 +4,9 @@ namespace App\Controllers;
 
 use App\Models\RecipeModel;
 use CodeIgniter\Controller;
+use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
+use App\Models\UserModel;
 
 class RecipeController extends Controller
 {
@@ -46,21 +49,55 @@ class RecipeController extends Controller
 
         return $this->response->setJSON($recipe);
     }
+
     public function create()
     {
         $recipeModel = new RecipeModel();
+        $db = \Config\Database::connect();
+        $ingredientModel = $db->table('ingredients');
+        $recipeIngredientsModel = $db->table('recipe_ingredients');
 
         $data = $this->request->getJSON(true);
 
         if (!$this->validate($recipeModel->validationRules)) {
-
             return $this->response->setJSON(['errors' => $this->validator->getErrors()])->setStatusCode(400);
         }
 
-        $data['user_id'] = session()->get('user_id'); 
+        $data['user_id'] = $this->getUserIdFromToken();
         $recipeModel->save($data);
+        $recipeId = $recipeModel->getInsertID();
 
-        return $this->response->setJSON(['message' => 'Recipe successfully added!'])->setStatusCode(201);
+        foreach ($data['ingredients'] as $ingredient) {
+            $ingredientRow = $ingredientModel->where('name', $ingredient['name'])->get()->getRow();
+            if (!$ingredientRow) {
+                $ingredientModel->insert([
+                    'name' => $ingredient['name'],
+                    'unit' => $ingredient['unit']
+                ]);
+                $ingredientId = $db->insertID();
+            } else {
+                $ingredientId = $ingredientRow->ingredient_id;
+            }
+
+            $recipeIngredientsModel->insert([
+                'recipe_id' => $recipeId,
+                'ingredient_id' => $ingredientId,
+                'quantity' => $ingredient['quantity']
+            ]);
+        }
+
+        return $this->response->setJSON(['message' => 'Recipe successfully created!'])->setStatusCode(201);
+    }
+
+    public function searchIngredients()
+    {
+        $query = $this->request->getGet('q');
+        $db = \Config\Database::connect();
+        $builder = $db->table('ingredients');
+        $builder->like('name', $query);
+        $result = $builder->get()->getResultArray();
+
+        return $this->response->setJSON($result);
     }
 
     public function update($id)
@@ -188,6 +225,56 @@ class RecipeController extends Controller
         $recipes = $query->getResultArray();
 
         return $this->response->setJSON($recipes);
+    }
+
+    public function getUserIdFromToken()
+    {
+        $authHeader = $this->request->getHeader('Authorization');
+        if (!$authHeader) {
+            log_message('error', 'Authorization header missing.');
+            return null;
+        }
+    
+        $token = explode(' ', $authHeader->getValue())[1];
+        $key = env('AUTH_JWT_SECRET', 'default_secret_key');
+    
+        try {
+            $decoded = JWT::decode($token, new Key($key, 'HS256'));
+            return $decoded->sub;
+        } catch (\Exception $e) {
+            log_message('error', 'JWT decoding failed: ' . $e->getMessage());
+            return null;
+        }
+    }
+
+    public function rateRecipe()
+    {
+        $recipeId = $this->request->getVar('recipe_id');
+        $userId = $this->getUserIdFromToken();
+        $rating = $this->request->getVar('rating');
+
+        $recipeModel = new \App\Models\RecipeModel();
+
+        if (!$recipeModel->find($recipeId)) {
+            return $this->response->setJSON(['error' => 'Recipe not found'])->setStatusCode(404);
+        }
+
+        $recipeModel->addRating($recipeId, $userId, $rating);
+
+        return $this->response->setJSON(['message' => 'Rating added successfully']);
+    }
+
+    public function getUserRating($recipeId)
+    {
+        $userId = $this->getUserIdFromToken();
+        if (!$userId) {
+            return $this->response->setJSON(['error' => 'User not authenticated'])->setStatusCode(401);
+        }
+
+        $recipeModel = new \App\Models\RecipeModel();
+        $rating = $recipeModel->getUserRating($recipeId, $userId);
+
+        return $this->response->setJSON(['rating' => $rating]);
     }
 
 }

@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Loader from './components/Loader/Loader';
+import AddRecipe from "./components/AddRecipe/AddRecipe";
 import Home from './pages/Home';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
@@ -16,6 +17,7 @@ import Profile from './pages/Profile/Profile';
 import RecipeDetails from './pages/RecipeDetails/RecipeDetails';
 import RecipesByCategory from './pages/RecipesByCategory/RecipesByCategory';
 import ProtectedRoute from './components/ProtectedRoute/ProtectedRoute';
+import Favorites from './pages/Favorites/Favorites';
 
 const Recipes = lazy(() => import('./pages/Recipes/Recipes'));
 
@@ -52,6 +54,22 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/liked"
+            element={
+              <ProtectedRoute>
+                <Favorites/>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-recipe"
+            element={
+              <ProtectedRoute>
+                <AddRecipe />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
       <Footer />
@@ -63,9 +81,9 @@ export default function WrappedApp() {
   return (
     <Provider store={store}>
       <Router>
-      <Suspense fallback={<Loader />}>
-        <App />
-      </Suspense>
+        <Suspense fallback={<Loader />}>
+          <App />
+        </Suspense>
       </Router>
     </Provider>
   );

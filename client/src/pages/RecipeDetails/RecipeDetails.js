@@ -1,16 +1,50 @@
 import React, { useState, useEffect } from "react";
-import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf } from 'react-icons/fa';
-import { useParams } from "react-router-dom";
+import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf, FaHeart, FaRegHeart, FaRegStar, FaStar } from 'react-icons/fa';
+import { useParams, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Loader from "../../components/Loader/Loader";
+import RatingModal from "../../components/RatingModal/RatingModal";
 import './RecipeDetails.css';
 
 const RecipeDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [recipe, setRecipe] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [servings, setServings] = useState(1);
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
+  const [userRating, setUserRating] = useState(null);
 
+  useEffect(() => {
+    const fetchUserRating = async () => {
+      try {
+        const token = localStorage.getItem('access_token');
+        if (!token) return;
+        const response = await fetch(`http://localhost:8080/recipes/rating/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          },
+        });
+        if (!response.ok) {
+          if (response.status === 401) {
+            console.error("User not authenticated");
+          }
+          throw new Error("Failed to fetch user rating");
+        }
+  
+        const data = await response.json();
+        setUserRating(data.rating);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+  
+    fetchUserRating();
+  }, [id]);
+  
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
@@ -30,9 +64,67 @@ const RecipeDetails = () => {
     fetchRecipe();
   }, [id]);
 
+  useEffect(() => {
+    const checkFavoriteStatus = async () => {
+      const token = localStorage.getItem('access_token');
+      if (!token) return;
+
+      try {
+        const response = await fetch(`http://localhost:8080/favorites/list`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          },
+        });
+        if (!response.ok) throw new Error("Failed to fetch favorites");
+  
+        const favorites = await response.json();
+        setIsFavorite(favorites.some((fav) => parseInt(fav.recipe_id) === parseInt(id)));
+      } catch (err) {
+        console.error("Error checking favorite status:", err.message);
+      }
+    };
+  
+    checkFavoriteStatus();
+  }, [id]);
+  
   if (loading) return <Loader />;
   if (error) return <p>Error: {error}</p>;
 
+  const toggleFavorite = async () => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const url = `http://localhost:8080/favorites/${isFavorite ? 'remove' : 'add'}`;
+      const response = await fetch(url, {
+        method: isFavorite ? 'DELETE' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({ recipe_id: parseInt(id) }),
+      });
+  
+      if (!response.ok) throw new Error(isFavorite ? 'Failed to remove favorite' : 'Failed to add favorite');
+  
+      const refreshFavorites = await fetch(`http://localhost:8080/favorites/list`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+      });
+  
+      if (!refreshFavorites.ok) throw new Error("Failed to refresh favorites");
+      const updatedFavorites = await refreshFavorites.json();
+  
+      setIsFavorite(updatedFavorites.some((fav) => parseInt(fav.recipe_id) === parseInt(id)));
+    } catch (err) {
+      console.error("Error toggling favorite:", err.message);
+    }
+  };
+  
   const getDifficultyColor = (difficulty) => {
     switch (difficulty) {
       case 'easy':
@@ -96,6 +188,35 @@ const RecipeDetails = () => {
     }
   };
 
+  const handleRatingSubmit = async (recipeId, userId, rating) => {
+    const token = localStorage.getItem('access_token');
+    if (!token) {
+      navigate('/login');
+      return;
+    }
+
+    try {
+      const response = await fetch("http://localhost:8080/recipes/rate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+        },
+        body: JSON.stringify({ recipe_id: recipeId, user_id: userId, rating }),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit rating");
+      }
+      
+      setUserRating(rating);
+      toast.success("Thank you for rating!");
+    } catch (error) {
+      console.error(error.message);
+      toast.error("Failed to submit your rating. Please try again.");
+    }
+  };
+
   return (
     <div className="recipe-details">
       <div className="recipe-header">
@@ -104,6 +225,23 @@ const RecipeDetails = () => {
         </div>
         <div className="recipe-info">
           <h1>{recipe.title}</h1>
+          <div className="button-container">
+          <button
+            className={`favorite-btn ${isFavorite ? 'favorite' : ''}`}
+            onClick={toggleFavorite}
+          >
+            {isFavorite ? <FaHeart /> : <FaRegHeart />}
+          </button>
+          <div className="rating-button">
+            <button className={`rating-btn ${userRating ? 'rated' : ''}`} onClick={() => setIsRatingModalOpen(true)}>
+              {userRating ? (
+                <FaStar/>
+              ) : (
+                <FaRegStar/>
+              )}
+            </button>
+          </div>
+        </div>
           <p className="recipe-description">{recipe.description}</p>
           <div className="recipe-times">
             <div className="time-item">
@@ -157,6 +295,15 @@ const RecipeDetails = () => {
         </button>
       </div>
       </div>
+      <RatingModal
+        isOpen={isRatingModalOpen}
+        onClose={() => setIsRatingModalOpen(false)}
+        recipeId={id}
+        userId={localStorage.getItem("user_id")}
+        onRatingSubmit={handleRatingSubmit}
+        initialRating={userRating}
+      />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };
