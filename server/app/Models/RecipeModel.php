@@ -56,14 +56,28 @@ class RecipeModel extends Model
 
     public function addRating($recipeId, $userId, $rating)
     {
-        $data = [
-            'recipe_id' => $recipeId,
-            'user_id' => $userId,
-            'rating' => $rating,
-        ];
+        $existingRating = $this->db->table('recipe_ratings')
+            ->where('recipe_id', $recipeId)
+            ->where('user_id', $userId)
+            ->get()
+            ->getRow();
 
-        $this->db->table('recipe_ratings')->insert($data);
+        if ($existingRating) {
+            // Update the existing rating
+            $this->db->table('recipe_ratings')
+                ->where('recipe_id', $recipeId)
+                ->where('user_id', $userId)
+                ->update(['rating' => $rating]);
+        } else {
+            // Insert a new rating
+            $this->db->table('recipe_ratings')->insert([
+                'recipe_id' => $recipeId,
+                'user_id' => $userId,
+                'rating' => $rating,
+            ]);
+        }
 
+        // Update the average rating
         $this->updateAverageRating($recipeId);
     }
 

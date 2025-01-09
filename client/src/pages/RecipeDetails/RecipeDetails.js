@@ -13,7 +13,33 @@ const RecipeDetails = () => {
   const [servings, setServings] = useState(1);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isRatingModalOpen, setIsRatingModalOpen] = useState(false);
+  const [userRating, setUserRating] = useState(null);
 
+  useEffect(() => {
+    const fetchUserRating = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/recipes/rating/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('access_token')}`,
+          },
+        });
+        if (!response.ok) {
+          if (response.status === 401) {
+            console.error("User not authenticated");
+          }
+          throw new Error("Failed to fetch user rating");
+        }
+  
+        const data = await response.json();
+        setUserRating(data.rating);
+      } catch (err) {
+        console.error(err.message);
+      }
+    };
+  
+    fetchUserRating();
+  }, [id]);
+  
   useEffect(() => {
     const fetchRecipe = async () => {
       try {
@@ -246,6 +272,7 @@ const RecipeDetails = () => {
         recipeId={id}
         userId={localStorage.getItem("user_id")}
         onRatingSubmit={handleRatingSubmit}
+        initialRating={userRating}
       />
     </div>
   );

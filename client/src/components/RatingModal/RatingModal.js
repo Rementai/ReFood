@@ -1,9 +1,17 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { PiChefHat } from "react-icons/pi";
 import "./RatingModal.css";
 
 const RatingModal = ({ isOpen, onClose, recipeId, userId, onRatingSubmit, initialRating }) => {
-    const [rating, setRating] = useState(initialRating || 0);
+  const [rating, setRating] = useState(initialRating || 0);
+
+  useEffect(() => {
+    setRating(initialRating || 0);
+  }, [initialRating]);
+
+  const handleRatingClick = (value) => {
+    setRating(value);
+  };
 
   const handleSubmit = () => {
     onRatingSubmit(recipeId, userId, rating);
@@ -12,7 +20,7 @@ const RatingModal = ({ isOpen, onClose, recipeId, userId, onRatingSubmit, initia
 
   if (!isOpen) return null;
 
-  return (
+  return isOpen ? (
     <div className="modal-overlay">
       <div className="modal-content">
         <h2>Rate this recipe</h2>
@@ -21,7 +29,7 @@ const RatingModal = ({ isOpen, onClose, recipeId, userId, onRatingSubmit, initia
             <span
               key={star}
               className={`star ${star <= rating ? "selected" : ""}`}
-              onClick={() => setRating(star)}
+              onClick={() => handleRatingClick(star)}
             >
               <PiChefHat />
             </span>
@@ -33,7 +41,7 @@ const RatingModal = ({ isOpen, onClose, recipeId, userId, onRatingSubmit, initia
         </div>
       </div>
     </div>
-  );
+  ) : null;
 };
 
 export default RatingModal;

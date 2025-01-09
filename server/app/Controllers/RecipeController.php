@@ -229,4 +229,18 @@ class RecipeController extends Controller
 
         return $this->response->setJSON(['message' => 'Rating added successfully']);
     }
+
+    public function getUserRating($recipeId)
+    {
+        $userId = $this->getUserIdFromToken();
+        if (!$userId) {
+            return $this->response->setJSON(['error' => 'User not authenticated'])->setStatusCode(401);
+        }
+
+        $recipeModel = new \App\Models\RecipeModel();
+        $rating = $recipeModel->getUserRating($recipeId, $userId);
+
+        return $this->response->setJSON(['rating' => $rating]);
+    }
+
 }
