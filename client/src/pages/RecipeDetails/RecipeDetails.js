@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf, FaHeart, FaRegHeart, FaRegStar } from 'react-icons/fa';
+import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf, FaHeart, FaRegHeart, FaRegStar, FaStar } from 'react-icons/fa';
 import { useParams, useNavigate } from "react-router-dom";
 import Loader from "../../components/Loader/Loader";
 import RatingModal from "../../components/RatingModal/RatingModal";
@@ -228,7 +228,13 @@ const RecipeDetails = () => {
             {isFavorite ? <FaHeart /> : <FaRegHeart />}
           </button>
           <div className="rating-button">
-            <button onClick={() => setIsRatingModalOpen(true)}><FaRegStar /></button>
+            <button className={`rating-btn ${userRating ? 'rated' : ''}`} onClick={() => setIsRatingModalOpen(true)}>
+              {userRating ? (
+                <FaStar/>
+              ) : (
+                <FaRegStar/>
+              )}
+            </button>
           </div>
         </div>
           <p className="recipe-description">{recipe.description}</p>

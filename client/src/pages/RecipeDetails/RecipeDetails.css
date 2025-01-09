@@ -236,15 +236,6 @@
   background-color: #b4ee94;
 }
 
-.favorite-btn.favorite {
-  color: red;
-}
-
-
-.favorite-btn:hover {
-  color: #ff6666;
-}
-
 .button-container {
   display: flex;
   justify-content: center; 
@@ -252,13 +243,12 @@
   margin-bottom: 20px;
 }
 
-.rating-button button {
-  background: none;
-  border: none;
-  color: #ffc107;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 2rem;
+.favorite-btn.favorite {
+  color: red;
+}
+
+.favorite-btn:hover {
+  color: #ff6666;
 }
 
 .favorite-btn {
@@ -269,3 +259,18 @@
   color: gray;
 }
 
+.rating-btn.rated {
+  color: #ffc107;
+}
+
+.rating-btn:hover {
+  color: #e2ad0e;
+}
+
+.rating-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 2rem;
+  color: gray;
+}
