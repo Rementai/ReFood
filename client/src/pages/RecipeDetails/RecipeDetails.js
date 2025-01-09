@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { FaClock, FaSignal, FaMinus, FaPlus, FaRegFilePdf, FaHeart, FaRegHeart, FaRegStar, FaStar } from 'react-icons/fa';
 import { useParams, useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import Loader from "../../components/Loader/Loader";
 import RatingModal from "../../components/RatingModal/RatingModal";
 import './RecipeDetails.css';
@@ -206,9 +208,12 @@ const RecipeDetails = () => {
       if (!response.ok) {
         throw new Error("Failed to submit rating");
       }
-      alert("Thank you for rating!");
+      
+      setUserRating(rating);
+      toast.success("Thank you for rating!");
     } catch (error) {
       console.error(error.message);
+      toast.error("Failed to submit your rating. Please try again.");
     }
   };
 
@@ -298,6 +303,7 @@ const RecipeDetails = () => {
         onRatingSubmit={handleRatingSubmit}
         initialRating={userRating}
       />
+      <ToastContainer position="top-right" autoClose={3000} hideProgressBar />
     </div>
   );
 };

@@ -49,21 +49,55 @@ class RecipeController extends Controller
 
         return $this->response->setJSON($recipe);
     }
+
     public function create()
     {
         $recipeModel = new RecipeModel();
+        $db = \Config\Database::connect();
+        $ingredientModel = $db->table('ingredients');
+        $recipeIngredientsModel = $db->table('recipe_ingredients');
 
         $data = $this->request->getJSON(true);
 
         if (!$this->validate($recipeModel->validationRules)) {
-
             return $this->response->setJSON(['errors' => $this->validator->getErrors()])->setStatusCode(400);
         }
 
-        $data['user_id'] = session()->get('user_id'); 
+        $data['user_id'] = $this->getUserIdFromToken();
         $recipeModel->save($data);
+        $recipeId = $recipeModel->getInsertID();
 
-        return $this->response->setJSON(['message' => 'Recipe successfully added!'])->setStatusCode(201);
+        foreach ($data['ingredients'] as $ingredient) {
+            $ingredientRow = $ingredientModel->where('name', $ingredient['name'])->get()->getRow();
+            if (!$ingredientRow) {
+                $ingredientModel->insert([
+                    'name' => $ingredient['name'],
+                    'unit' => $ingredient['unit']
+                ]);
+                $ingredientId = $db->insertID();
+            } else {
+                $ingredientId = $ingredientRow->ingredient_id;
+            }
+
+            $recipeIngredientsModel->insert([
+                'recipe_id' => $recipeId,
+                'ingredient_id' => $ingredientId,
+                'quantity' => $ingredient['quantity']
+            ]);
+        }
+
+        return $this->response->setJSON(['message' => 'Recipe successfully created!'])->setStatusCode(201);
+    }
+
+    public function searchIngredients()
+    {
+        $query = $this->request->getGet('q');
+        $db = \Config\Database::connect();
+        $builder = $db->table('ingredients');
+        $builder->like('name', $query);
+        $result = $builder->get()->getResultArray();
+
+        return $this->response->setJSON($result);
     }
 
     public function update($id)

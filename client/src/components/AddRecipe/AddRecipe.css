@@ -1,0 +1,187 @@
+.add-recipe {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    background: linear-gradient(to bottom right, #e5f5e6, #78ac7a);
+    position: relative;
+    overflow: hidden;
+}
+
+.add-recipe::before,
+.add-recipe::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(48, 140, 3, 0.3);
+    z-index: 0;
+}
+
+.add-recipe::before {
+    width: 300px;
+    height: 300px;
+    top: -50px;
+    left: -50px;
+}
+
+.add-recipe::after {
+    width: 400px;
+    height: 400px;
+    bottom: -100px;
+    right: -100px;
+}
+
+.add-recipe h2 {
+    color: #308c03;
+    text-align: center;
+    z-index: 1;
+}
+
+.add-recipe h3 {
+    color: #308c03;
+}
+
+.add-recipe form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    max-width: 400px;
+    z-index: 1;
+}
+
+.add-recipe label {
+    font-size: 14px;
+    font-weight: bold;
+    color: #308c03;
+}
+
+.add-recipe input,
+.add-recipe select,
+.add-recipe textarea {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    background: white;
+    z-index: 1;
+}
+
+.add-recipe button[type="submit"] {
+    background-color: #308c03;
+    color: white;
+    border: none;
+    padding: 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: background-color 0.3s;
+    z-index: 1;
+}
+
+.add-recipe input[type="submit"]:hover, 
+.add-recipe button[type="submit"]:hover {
+    background-color: #276c02;
+}
+
+.add-recipe ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.add-recipe li {
+    background-color: #ebf7e2;
+    margin-bottom: 5px;
+    padding: 10px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.add-recipe li button {
+    background-color: #ff4136;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.add-recipe li button:hover {
+    background-color: #d32f2f;
+}
+
+.add-btn {
+    margin-top: 25px;
+}
+
+.message {
+    margin: 20px 0;
+    padding: 10px;
+    border-radius: 6px;
+    font-size: 14px;
+    text-align: center;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.message.success {
+    background-color: #e6f7e6;
+    color: #2d862d;
+    border: 1px solid #2d862d;
+}
+
+.message.error {
+    background-color: #fbe4e4;
+    color: #d32f2f;
+    border: 1px solid #d32f2f;
+}
+
+
+/* Styling dla IngredientSelector */
+.ingredient-selector {
+    margin-top: 10px;
+    border-top: 1px solid #ddd;
+    padding-top: 10px;
+}
+
+.ingredient-details {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.ingredient-details input, 
+.ingredient-details select {
+    flex: 1;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    background: white;
+}
+
+.ingredient-details button {
+    background-color: #308c03;
+    color: white;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ingredient-details button:hover {
+    background-color: #276c02;
+}
+
+.async-select {
+    z-index: 1000; /* Wyższy z-index */
+}

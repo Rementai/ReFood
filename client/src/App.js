@@ -9,6 +9,7 @@ import { Provider } from 'react-redux';
 import Header from './components/Header/Header';
 import Footer from './components/Footer/Footer';
 import Loader from './components/Loader/Loader';
+import AddRecipe from "./components/AddRecipe/AddRecipe";
 import Home from './pages/Home';
 import Signup from './pages/Signup/Signup';
 import Login from './pages/Login/Login';
@@ -65,7 +66,7 @@ function App() {
             path="/add-recipe"
             element={
               <ProtectedRoute>
-                
+                <AddRecipe />
               </ProtectedRoute>
             }
           />
